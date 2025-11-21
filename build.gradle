@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '9.2.2'
 }
 
 group = 'me.ziyframework.agent'
@@ -10,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.ow2.asm:asm:9.9'
+    implementation 'org.ow2.asm:asm-commons:9.9'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -17,4 +21,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    archiveClassifier.set("") // 去掉生成jar的-all后缀
+    manifest {
+        attributes['Main-Class'] = "me.ziyframework.agent.palantir.java.format.PalantirJavaFormatFixAgent"
+    }
+    mergeServiceFiles()
 }

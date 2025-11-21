@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'me.ziyframework.agent'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -26,7 +26,10 @@ test {
 shadowJar {
     archiveClassifier.set("") // 去掉生成jar的-all后缀
     manifest {
-        attributes['Main-Class'] = "me.ziyframework.agent.palantir.java.format.PalantirJavaFormatFixAgent"
+        attributes['Premain-Class'] = "me.ziyframework.agent.palantir.java.format.PalantirJavaFormatFixAgent"
+        attributes['Agent-Class'] = "me.ziyframework.agent.palantir.java.format.PalantirJavaFormatFixAgent"
+        attributes['Can-Redefine-Classes'] = "true"
+        attributes['Can-Retransform-Classes'] = "true"
     }
     mergeServiceFiles()
 }

@@ -13,6 +13,6 @@ public class PalantirJavaFormatFixAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
         System.out.println(">>> [PalantirJavaFormatFixAgent] 已加载，准备修复 Groovy XmlParser 兼容性问题...");
-        inst.addTransformer(new XmlUtilsTransformer());
+        inst.addTransformer(new XmlUtilsTransformer(), true);
     }
 }

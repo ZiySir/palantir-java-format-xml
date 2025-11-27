@@ -15,4 +15,9 @@ public class PalantirJavaFormatFixAgent {
         System.out.println(">>> [PalantirJavaFormatFixAgent] 已加载，准备修复 Groovy XmlParser 兼容性问题...");
         inst.addTransformer(new XmlFixTransformer(), true);
     }
+
+    public static void agentmain(String agentArgs, Instrumentation inst) {
+        System.out.println(">>> [PalantirJavaFormatFixAgent] attach 已加载，准备修复 Groovy XmlParser 兼容性问题...");
+        inst.addTransformer(new XmlFixTransformer(), true);
+    }
 }

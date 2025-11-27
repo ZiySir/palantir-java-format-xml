@@ -4,14 +4,10 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.SimpleRemapper;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
-import java.nio.file.Files;
 import java.security.ProtectionDomain;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 将XmlUtils类的api进行迁移.
@@ -19,9 +15,12 @@ import java.util.Map;
  *
  * @author ziy
  */
-public class XmlUtilsTransformer implements ClassFileTransformer {
+public class XmlFixTransformer implements ClassFileTransformer {
 
-    private static final String[] TARGET_CLASS = {"com.palantir.baseline.plugins.", "com/palantir/javaformat/gradle/XmlUtils"};
+    private static final Set<String> TARGET_CLASS = Set.of("com/palantir/baseline/plugins/BaselineIdea",
+            "com/palantir/baseline/plugins/XmlUtils",
+            "com/palantir/gradle/ideaconfiguration/XmlUtils",
+            "com/palantir/javaformat/gradle/XmlUtils");
 
     private static final Map<String, String> MAPPING = Map.of(
             "groovy/util/XmlNodePrinter", "groovy/xml/XmlNodePrinter",
@@ -32,6 +31,9 @@ public class XmlUtilsTransformer implements ClassFileTransformer {
     public byte[] transform(Module module, ClassLoader loader, String className,
                             Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
+        if (!TARGET_CLASS.contains(className)) {
+            return null;
+        }
         System.out.println(">>> [Agent] Transforming class: " + className);
 
         ClassReader cr = new ClassReader(classfileBuffer);
